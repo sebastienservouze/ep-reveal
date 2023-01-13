@@ -1,13 +1,22 @@
 import * as express from 'express';
-import * as https from 'http';
+import * as https from 'https';
 import { MongoClient } from 'mongodb';
 import * as WebSocket from 'ws';
+
+const fs = require('fs');
 
 // Express
 const app = express();
 
+var cert = fs.readFileSync('/etc/letsencrypt/live/nerisma.fr/fullchain.pem');
+var key = fs.readFileSync('/etc/letsencrypt/live/nerisma.fr/privkey.pem');
+var options = {
+    key: key,
+    cert: cert,
+};
+
 //initialize a simple http server
-const server = https.createServer(app);
+const server = https.createServer(options, app);
 
 //initialize the WebSocket server instance
 const wss = new WebSocket.Server({ server });
