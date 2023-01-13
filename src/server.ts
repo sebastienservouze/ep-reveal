@@ -1,5 +1,5 @@
 import * as express from 'express';
-import * as http from 'http';
+import * as https from 'http';
 import { MongoClient } from 'mongodb';
 import * as WebSocket from 'ws';
 
@@ -7,7 +7,7 @@ import * as WebSocket from 'ws';
 const app = express();
 
 //initialize a simple http server
-const server = http.createServer(app);
+const server = https.createServer(app);
 
 //initialize the WebSocket server instance
 const wss = new WebSocket.Server({ server });
