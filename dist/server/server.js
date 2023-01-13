@@ -10,13 +10,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
-const http = require("http");
+const https = require("https");
 const mongodb_1 = require("mongodb");
 const WebSocket = require("ws");
+const fs = require('fs');
 // Express
 const app = express();
+var cert = fs.readFileSync('/etc/letsencrypt/live/nerisma.fr/fullchain.pem');
+var key = fs.readFileSync('/etc/letsencrypt/live/nerisma.fr/privkey.pem');
+var options = {
+    key: key,
+    cert: cert,
+};
 //initialize a simple http server
-const server = http.createServer(app);
+const server = https.createServer(options, app);
 //initialize the WebSocket server instance
 const wss = new WebSocket.Server({ server });
 // Paramètres
