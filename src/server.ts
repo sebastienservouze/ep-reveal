@@ -17,6 +17,7 @@ var options = {
 
 //initialize a simple http server
 const server = https.createServer(options, app);
+// const server = http.createServer(app);
 
 //initialize the WebSocket server instance
 const wss = new WebSocket.Server({ server });
@@ -79,7 +80,9 @@ async function run() {
 
                 console.log(progressEnr.value);
 
-                ws.send(progressEnr.value);
+                wss.clients.forEach((client: WebSocket) => {
+                    if (progressEnr) client.send(progressEnr.value);
+                })
             });
         
             //send immediatly a feedback to the incoming connection    

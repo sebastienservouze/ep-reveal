@@ -10,20 +10,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
-const https = require("https");
+const http = require("http");
 const mongodb_1 = require("mongodb");
 const WebSocket = require("ws");
 const fs = require('fs');
 // Express
 const app = express();
-var cert = fs.readFileSync('/etc/letsencrypt/live/nerisma.fr/fullchain.pem');
-var key = fs.readFileSync('/etc/letsencrypt/live/nerisma.fr/privkey.pem');
-var options = {
-    key: key,
-    cert: cert,
-};
+// var cert = fs.readFileSync('/etc/letsencrypt/live/nerisma.fr/fullchain.pem');
+// var key = fs.readFileSync('/etc/letsencrypt/live/nerisma.fr/privkey.pem');
+// var options = {
+//     key: key,
+//     cert: cert,
+// };
 //initialize a simple http server
-const server = https.createServer(options, app);
+// const server = https.createServer(options, app);
+const server = http.createServer(app);
 //initialize the WebSocket server instance
 const wss = new WebSocket.Server({ server });
 // Paramètres
@@ -78,7 +79,10 @@ function run() {
                         }
                     });
                     console.log(progressEnr.value);
-                    ws.send(progressEnr.value);
+                    wss.clients.forEach((client) => {
+                        if (progressEnr)
+                            client.send(progressEnr.value);
+                    });
                 }));
                 //send immediatly a feedback to the incoming connection    
                 ws.send(progressEnr.value);
